@@ -18,15 +18,14 @@ TODOROUTER = require("./routes/todo");
 
 app.use("/todo", TODOROUTER);
 
-var Port = process.env.PORT || 1336;
-
-// app.listen(1337, () => {
-//   console.log("Server started on 1337");
-// });
+var Port = process.env.PORT || 1335;
 
 app.listen(Port, async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
+    await mongoose.connect(
+      process.env.MONGODB_URI ||
+        "mongodb+srv://shoaibqadeer:shoaibqadeer@cluster0.auqtfqg.mongodb.net/?retryWrites=true&w=majority"
+    );
     console.log("Connected to MongoDB");
   } catch (error) {
     console.error("Failed to connect to MongoDB:", error.message);
