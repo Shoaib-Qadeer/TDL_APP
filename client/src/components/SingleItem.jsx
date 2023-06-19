@@ -152,6 +152,20 @@ const SingleItem = ({ todoitem, deletetodo, updatecompletion, undoupdate }) => {
           </MenuItem> */}
         </Menu>
       </div>
+
+      {todoitem.CompletionTime ? (
+        <>
+          <Typography style={{ fontSize: "9px", paddingLeft: "20px" }}>
+            Completed at: {todoitem.CompletionTime.slice(0, 10)}
+          </Typography>
+        </>
+      ) : (
+        <>
+          <Typography style={{ fontSize: "9px", paddingLeft: "20px" }}>
+            Pending
+          </Typography>
+        </>
+      )}
     </div>
   );
 };

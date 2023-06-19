@@ -6,7 +6,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 const app = express();
-
+const DBService = require("./dbservice.js");
 app.use(cors());
 app.use(express.json());
 
@@ -17,16 +17,13 @@ app.use(cookieParser());
 TODOROUTER = require("./routes/todo");
 
 app.use("/todo", TODOROUTER);
+const dbService = new DBService();
 
 var Port = process.env.PORT || 1335;
 
 app.listen(Port, async () => {
   try {
-    await mongoose.connect(
-      process.env.MONGODB_URI ||
-        "mongodb+srv://shoaibqadeer:shoaibqadeer@cluster0.auqtfqg.mongodb.net/?retryWrites=true&w=majority"
-    );
-    console.log("Connected to MongoDB");
+    dbService.connect();
   } catch (error) {
     console.error("Failed to connect to MongoDB:", error.message);
   }
