@@ -8,7 +8,7 @@ import { CircularProgress } from "@mui/material";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import todoService from "./todoservice";
 function App() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,42 +20,29 @@ function App() {
 
   const addtodoitem = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/todo`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ title: userInput }),
-        }
-      );
-      const jsonData = await response.json();
+      const jsonData = await todoService.addtodoitem(userInput);
       if (jsonData) {
         setUserInput("");
         toast.success("Task Added Successfully");
         getItems();
       }
-    } catch (err) {
-      console.error(err.message);
+    } catch (error) {
+      console.error(error.message);
     }
   };
 
   const deletetodo = async (id) => {
     try {
-      const response = await fetch(
-        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/todo/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
-      const dataobtained = await response.json();
-      if (dataobtained.status === "ok") {
-        toast.error("Task Deleted ");
+      const jsonData = await todoService.deletetodo(id);
+      if (jsonData.status === "ok") {
+        toast.error("Task Deleted");
         getItems();
       }
-    } catch (err) {
-      console.error(err.message);
+    } catch (error) {
+      console.error(error.message);
     }
   };
+
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       addtodoitem();
@@ -64,59 +51,35 @@ function App() {
 
   const updatecompleted = async (id) => {
     try {
-      const response = await fetch(
-        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/todo/${id}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      const dataobtained = await response.json();
-      if (dataobtained.status === "ok") {
-        toast.success("Task Completed ");
+      const jsonData = await todoService.updatecompleted(id);
+      if (jsonData.status === "ok") {
+        toast.success("Task Completed");
         getItems();
       }
-    } catch (err) {
-      console.error(err.message);
+    } catch (error) {
+      console.error(error.message);
     }
   };
 
   const undoupdatecomplete = async (id) => {
     try {
-      const response = await fetch(
-        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/todo/undo/${id}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      const dataobtained = await response.json();
-      if (dataobtained.status === "ok") {
-        toast.error("Task marked Uncompleted ");
+      const jsonData = await todoService.undoupdatecomplete(id);
+      if (jsonData.status === "ok") {
+        toast.error("Task marked Uncompleted");
         getItems();
       }
-    } catch (err) {
-      console.error(err.message);
+    } catch (error) {
+      console.error(error.message);
     }
   };
 
   const getItems = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:${process.env.REACT_APP_SERVER_PORT}/todo`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      const dataobtained = await response.json();
-      if (dataobtained.status === "ok") {
-        setItems(dataobtained.todos);
-
-        setLoading(false);
-      }
-    } catch (err) {
-      console.error(err.message);
+      const todos = await todoService.getItems();
+      setItems(todos);
+      setLoading(false);
+    } catch (error) {
+      console.error(error.message);
     }
   };
 

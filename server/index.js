@@ -23,7 +23,15 @@ var Port = process.env.PORT || 1335;
 
 app.listen(Port, async () => {
   try {
-    dbService.connect();
+    if (process.env.NODE_ENV === "test") {
+      const testConfig = require("./test.config");
+      mongoose.connect(testConfig.MONGODB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
+    } else {
+      dbService.connect();
+    }
   } catch (error) {
     console.error("Failed to connect to MongoDB:", error.message);
   }
