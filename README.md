@@ -40,7 +40,12 @@ Step 3) Move to backend/server folder and install server reqs.
 
 Step 4) Access the App on port 3000 (http://localhost:3000)
 
-
+## Testing
+Step A) Move to backend/server folder and install server reqs. (if not already)
+Step B) Run npm test
+```bash
+  npm test
+```
 
 ## Environment Variables & Reqs
 
